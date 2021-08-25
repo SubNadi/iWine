@@ -1,0 +1,45 @@
+openapi: 3.0.2
+info:
+  title: iWine
+  description: Проект Умный графин
+  version: 1.0.0
+servers:
+- url: api.iwine.com
+paths:
+  /wine/volume:
+    get:
+      summary: Получить информацию об объеме налитого в графин вина.
+      description: Информация об объеме вина может быть представлена в миллилитрах
+        или граммах.
+      parameters:
+      - name: Units
+        in: query
+        description: "Единица измерения для объема вина.\nВозможные значения:\n* *ml*\
+          \ — миллилитры,\n* *g* — граммы.\n\nЕсли в запросе не указан параметр ил\
+          и не указано значение параметра, то объем будет представлен в миллилитра\
+          х."
+        required: false
+        allowEmptyValue: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Запрос выполнен успешно.
+          content:
+            text/plain:
+              schema:
+                title: Данные найдены
+                type: string
+                example: Данные найдены.
+        "400":
+          description: "Неверный запрос. Этот ответ означает, что сервер не понима\
+            ет запрос из-за неверного синтаксиса."
+          content:
+            text/plain:
+              schema:
+                title: Данные не найдены
+                type: string
+                example: Данные не найдены.
+components: {}
