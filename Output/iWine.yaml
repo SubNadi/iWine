@@ -6,7 +6,7 @@ info:
 servers:
 - url: api.iwine.com
 paths:
-  /wine/volume:
+  /volume:
     get:
       summary: Получить информацию об объеме налитого в графин вина.
       description: Информация об объеме вина может быть представлена в миллилитрах
@@ -14,10 +14,10 @@ paths:
       parameters:
       - name: Units
         in: query
-        description: "Единица измерения для объема вина.\nВозможные значения:\n* *ml*\
-          \ — миллилитры,\n* *g* — граммы.\n\nЕсли в запросе не указан параметр ил\
-          и не указано значение параметра, то объем будет представлен в миллилитра\
-          х."
+        description: "Единица измерения для объема вина.\nВозможные значения:\n* *м\
+          л* — миллилитры,\n* *г* — граммы.\n\nЕсли в запросе не указан параметр и\
+          ли не указано значение параметра, то объем будет представлен в миллилитр\
+          ах."
         required: false
         allowEmptyValue: true
         style: form
@@ -28,18 +28,140 @@ paths:
         "200":
           description: Запрос выполнен успешно.
           content:
-            text/plain:
+            application/json:
               schema:
-                title: Данные найдены
-                type: string
-                example: Данные найдены.
+                $ref: '#/components/schemas/inline_response_200'
         "400":
           description: "Неверный запрос. Этот ответ означает, что сервер не понима\
             ет запрос из-за неверного синтаксиса."
           content:
             text/plain:
               schema:
-                title: Данные не найдены
-                type: string
-                example: Данные не найдены.
-components: {}
+                $ref: '#/components/schemas/400'
+        "404":
+          description: Сервер не может найти запрашиваемый ресурс.
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/404'
+  /alcohol:
+    get:
+      summary: Получить информацию о содержании алкоголя в вине.
+      description: Крепость вина выражена в процентах.
+      responses:
+        "200":
+          description: Запрос выполнен успешно.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_1'
+        "400":
+          description: "Неверный запрос. Этот ответ означает, что сервер не понима\
+            ет запрос из-за неверного синтаксиса."
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/400'
+        "404":
+          description: Сервер не может найти запрашиваемый ресурс.
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/404'
+  /sugar:
+    get:
+      summary: Получить информацию о содержании сахара в вине.
+      description: Сладость вина выражена в граммах на литр (г/л).
+      responses:
+        "200":
+          description: Запрос выполнен успешно.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_2'
+        "400":
+          description: "Неверный запрос. Этот ответ означает, что сервер не понима\
+            ет запрос из-за неверного синтаксиса."
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/400'
+        "404":
+          description: Сервер не может найти запрашиваемый ресурс.
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/404'
+  /temperature:
+    get:
+      summary: Получить информацию о температуре вина.
+      description: Информация о температуре может быть представлена в градусах Цельсия
+        (°С) или градусах Фаренгейта (°F) или граммах.
+      parameters:
+      - name: Degree
+        in: query
+        description: "Единица измерения для температуры.\nВозможные значения:\n* *C*\
+          \ — градусы Цельсия,\n* *F* — градусы Фаренгейта.\n\nЕсли в запросе не у\
+          казан параметр или не указано значение параметра, то температура будет п\
+          редставлена в градусах Цельсия."
+        required: false
+        allowEmptyValue: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Запрос выполнен успешно.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200'
+        "400":
+          description: "Неверный запрос. Этот ответ означает, что сервер не понима\
+            ет запрос из-за неверного синтаксиса."
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/400'
+        "404":
+          description: Сервер не может найти запрашиваемый ресурс.
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/404'
+components:
+  schemas:
+    "400":
+      title: 400 Неверный запрос
+      type: string
+      example: Ошибка 400. Неверный запрос.
+    "404":
+      title: 404 Ресурс не найден
+      type: string
+      example: Ошибка 404. Ресурс не найден.
+    inline_response_200:
+      type: object
+      properties:
+        volume:
+          type: integer
+          description: Объем
+          example: 100
+        unit:
+          type: string
+          description: Единица измерения
+          example: мл
+    inline_response_200_1:
+      type: object
+      properties:
+        percent:
+          type: integer
+          description: Процент алкоголя
+          example: 12
+    inline_response_200_2:
+      type: object
+      properties:
+        sweet:
+          type: integer
+          description: Количество сахара
+          example: 40
