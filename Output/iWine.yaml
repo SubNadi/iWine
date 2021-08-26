@@ -374,6 +374,74 @@ paths:
             text/plain:
               schema:
                 $ref: '#/components/schemas/404'
+  /stirring:
+    post:
+      tags:
+      - Операции с вином
+      summary: Создать задачу на взбалтывание вина.
+      description: "Конечная точка позволяет отправить запрос на взбалтывание вина\
+        , чтобы насытить его кислородом."
+      responses:
+        "200":
+          description: Запрос выполнен успешно.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_6'
+        "400":
+          description: "Неверный запрос. Этот ответ означает, что сервер не понима\
+            ет запрос из-за неверного синтаксиса."
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/400'
+        "404":
+          description: Сервер не может найти запрашиваемый ресурс.
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/404'
+  /stirring/tasks/{taskID}:
+    get:
+      tags:
+      - Операции с вином
+      summary: Получить статус выполнения задачи на взбалтывание вина.
+      description: "Для получения статуса задачи в запросе должен быть передан иде\
+        нтификатор поставленной задачи.\n\nВ случае успешного выполнения запроса в\
+        озвращается значение статуса задачи:\n* *0* — создана,\n* *1* — идет выпол\
+        нение,\n* *2* — успешно выполнена,\n* *3* — завершена с ошибками.\n\nНеобх\
+        одимо выполнять отправку запроса в цикле до тех пор, пока статус имеет зна\
+        чение *0* или *1*. После получения значения *2* или *3* следует обработать\
+        \ результат выполнения задачи."
+      parameters:
+      - name: taskID
+        in: path
+        description: Идентификатор задачи.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Запрос выполнен успешно.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_9'
+        "400":
+          description: "Неверный запрос. Этот ответ означает, что сервер не понима\
+            ет запрос из-за неверного синтаксиса."
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/400'
+        "404":
+          description: Сервер не может найти запрашиваемый ресурс.
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/404'
 components:
   schemas:
     "400":
@@ -469,6 +537,17 @@ components:
           description: Статус задачи
           example: 0
         heating_message:
+          type: string
+          description: Описание статуса
+          example: Задача выполнена
+    inline_response_200_9:
+      type: object
+      properties:
+        stirring_status:
+          type: integer
+          description: Статус задачи
+          example: 0
+        stirring_message:
           type: string
           description: Описание статуса
           example: Задача выполнена
