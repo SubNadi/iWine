@@ -6,24 +6,11 @@ info:
 servers:
 - url: api.iwine.com
 paths:
-  /volume:
+  /wine:
     get:
-      summary: Получить информацию об объеме налитого в графин вина.
-      description: Информация об объеме вина может быть представлена в миллилитрах
-        или граммах.
-      parameters:
-      - name: Units
-        in: query
-        description: "Единица измерения для объема вина.\nВозможные значения:\n* *м\
-          л* — миллилитры,\n* *г* — граммы.\n\nЕсли в запросе не указан параметр и\
-          ли не указано значение параметра, то объем будет представлен в миллилитр\
-          ах."
-        required: false
-        allowEmptyValue: true
-        style: form
-        explode: true
-        schema:
-          type: string
+      summary: Получить список свойств вина.
+      description: "Конечная точка позволяет получить перечень всех свойств вина,\
+        \ которые **iWine** может определить и отправить пользователю."
       responses:
         "200":
           description: Запрос выполнен успешно.
@@ -44,10 +31,24 @@ paths:
             text/plain:
               schema:
                 $ref: '#/components/schemas/404'
-  /alcohol:
+  /wine/volume:
     get:
-      summary: Получить информацию о содержании алкоголя в вине.
-      description: Крепость вина выражена в процентах.
+      summary: Получить информацию об объеме налитого в графин вина.
+      description: Информация об объеме вина может быть представлена в миллилитрах
+        или граммах.
+      parameters:
+      - name: units
+        in: query
+        description: "Единица измерения для объема вина.\nВозможные значения:\n* *м\
+          л* — миллилитры,\n* *г* — граммы.\n\nЕсли в запросе не указан параметр и\
+          ли не указано значение параметра, то объем будет представлен в миллилитр\
+          ах."
+        required: false
+        allowEmptyValue: true
+        style: form
+        explode: true
+        schema:
+          type: string
       responses:
         "200":
           description: Запрос выполнен успешно.
@@ -68,10 +69,10 @@ paths:
             text/plain:
               schema:
                 $ref: '#/components/schemas/404'
-  /sugar:
+  /wine/alcohol:
     get:
-      summary: Получить информацию о содержании сахара в вине.
-      description: Сладость вина выражена в граммах на литр (г/л).
+      summary: Получить информацию о содержании алкоголя в вине.
+      description: Крепость вина выражена в процентах.
       responses:
         "200":
           description: Запрос выполнен успешно.
@@ -92,18 +93,42 @@ paths:
             text/plain:
               schema:
                 $ref: '#/components/schemas/404'
-  /temperature:
+  /wine/sugar:
+    get:
+      summary: Получить информацию о содержании сахара в вине.
+      description: Сладость вина выражена в граммах на литр (г/л).
+      responses:
+        "200":
+          description: Запрос выполнен успешно.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_3'
+        "400":
+          description: "Неверный запрос. Этот ответ означает, что сервер не понима\
+            ет запрос из-за неверного синтаксиса."
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/400'
+        "404":
+          description: Сервер не может найти запрашиваемый ресурс.
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/404'
+  /wine/temperature:
     get:
       summary: Получить информацию о температуре вина.
       description: Информация о температуре может быть представлена в градусах Цельсия
         (°С) или градусах Фаренгейта (°F) или граммах.
       parameters:
-      - name: Degree
+      - name: degree
         in: query
-        description: "Единица измерения для температуры.\nВозможные значения:\n* *C*\
-          \ — градусы Цельсия,\n* *F* — градусы Фаренгейта.\n\nЕсли в запросе не у\
-          казан параметр или не указано значение параметра, то температура будет п\
-          редставлена в градусах Цельсия."
+        description: "Единица измерения температуры.\nВозможные значения:\n* *C* —\
+          \ градусы Цельсия,\n* *F* — градусы Фаренгейта.\n\nЕсли в запросе не ука\
+          зан параметр или не указано значение параметра, то температура будет пре\
+          дставлена в градусах Цельсия."
         required: false
         allowEmptyValue: true
         style: form
@@ -116,7 +141,128 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200'
+                $ref: '#/components/schemas/inline_response_200_4'
+        "400":
+          description: "Неверный запрос. Этот ответ означает, что сервер не понима\
+            ет запрос из-за неверного синтаксиса."
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/400'
+        "404":
+          description: Сервер не может найти запрашиваемый ресурс.
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/404'
+  /wine/type:
+    get:
+      summary: Получить информацию о типе вина.
+      description: "Возможно определение следующих типов вина: красное, белое, роз\
+        овое, оранжевое."
+      responses:
+        "200":
+          description: Запрос выполнен успешно.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_5'
+        "400":
+          description: "Неверный запрос. Этот ответ означает, что сервер не понима\
+            ет запрос из-за неверного синтаксиса."
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/400'
+        "404":
+          description: Сервер не может найти запрашиваемый ресурс.
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/404'
+  /cooling:
+    post:
+      tags:
+      - Операции с вином
+      summary: Создать задачу на охлаждение вина.
+      description: Конечная точка позволяет отправить запрос на охлаждение вина до
+        заданной температуры.
+      parameters:
+      - name: temperature
+        in: query
+        description: "Температура, до которой нужно охладить вино.\n\nДопустим вво\
+          д значений в диапазонах: *5–75*°С или *41–167*°F.\n\nЕсли текущая темпер\
+          атура вина ниже температуры охлаждения, то сервер вернет ошибку 405."
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: integer
+      - name: units
+        in: query
+        description: "Единица измерения температуры.\n\nВозможные значения:\n* *C*\
+          \ — градусы Цельсия,\n* *F* — градусы Фаренгейта.\n\nЕсли в запросе не у\
+          казан параметр или не указано значение параметра, то охлаждение будет вы\
+          полнено до температуры в градусах Цельсия."
+        required: false
+        allowEmptyValue: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Запрос выполнен успешно.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_6'
+        "400":
+          description: "Неверный запрос. Этот ответ означает, что сервер не понима\
+            ет запрос из-за неверного синтаксиса."
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/400'
+        "404":
+          description: Сервер не может найти запрашиваемый ресурс.
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/404'
+        "405":
+          description: Неверный ввод данных.
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/405'
+  /cooling/tasks/{taskID}:
+    get:
+      tags:
+      - Операции с вином
+      summary: Получить статус выполнения задачи на охлаждение вина.
+      description: "Для получения статуса задачи в запросе должен быть передан иде\
+        нтификатор поставленной задачи.\n\nВ случае успешного выполнения запроса в\
+        озвращается значение статуса задачи:\n* *0* — создана,\n* *1* — успешно об\
+        работана,\n* *2* — завершена с ошибками.\n\nНеобходимо выполнять отправку\
+        \ запроса в цикле до тех пор, пока статус равен нулю. После получения отли\
+        чного от нуля значения следует обработать результат выполнения задачи."
+      parameters:
+      - name: taskID
+        in: path
+        description: Идентификатор задачи.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Запрос выполнен успешно.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_7'
         "400":
           description: "Неверный запрос. Этот ответ означает, что сервер не понима\
             ет запрос из-за неверного синтаксиса."
@@ -139,8 +285,24 @@ components:
     "404":
       title: 404 Ресурс не найден
       type: string
-      example: Ошибка 404. Ресурс не найден.
+      example: Ошибка 404. Сервер не может найти графин или графин пуст.
+    "405":
+      title: 405 Неверный ввод данных
+      type: string
+      example: Ошибка 405. Входные данные выходят за пределы разрешенного диапазона
+        или не удовлетворяют условию выполнения задачи.
     inline_response_200:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Идентификатор свойства
+          example: 1
+        name:
+          type: string
+          description: Наименование свойства
+          example: Объем
+    inline_response_200_1:
       type: object
       properties:
         volume:
@@ -151,17 +313,53 @@ components:
           type: string
           description: Единица измерения
           example: мл
-    inline_response_200_1:
+    inline_response_200_2:
       type: object
       properties:
         percent:
           type: integer
           description: Процент алкоголя
           example: 12
-    inline_response_200_2:
+    inline_response_200_3:
       type: object
       properties:
         sweet:
           type: integer
           description: Количество сахара
           example: 40
+    inline_response_200_4:
+      type: object
+      properties:
+        volume:
+          type: integer
+          description: Объем
+          example: 100
+        unit:
+          type: string
+          description: Единица измерения
+          example: °С
+    inline_response_200_5:
+      type: object
+      properties:
+        color:
+          type: string
+          description: Тип вина
+          example: Белое
+    inline_response_200_6:
+      type: object
+      properties:
+        taskID:
+          type: integer
+          description: Идентификатор задачи
+          example: 15
+    inline_response_200_7:
+      type: object
+      properties:
+        cooling_status:
+          type: integer
+          description: Статус задачи
+          example: 0
+        cooling_message:
+          type: string
+          description: Описание статуса
+          example: Задача выполнена
