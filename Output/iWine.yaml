@@ -51,11 +51,11 @@ info:
   version: 1.0.0
 servers:
 - url: https://api.iwine.com
-  description: '### **Рабочий сервер**'
+  description: Рабочий сервер
 - url: https://demoapi.iwine.com
-  description: '### **Тестовый сервер**'
+  description: Тестовый сервер
 - url: https://api.iwine.local
-  description: '### **Локальный сервер**'
+  description: Локальный сервер
 security:
 - app_id: []
 paths:
@@ -155,8 +155,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/inline_response_200_2'
         "400":
-          description: Неверный запрос. Сервер не понимает запрос из-за неверного
-            синтаксиса.
+          description: '*Неверный запрос*. Сервер не понимает запрос из-за неверного
+            синтаксиса.'
           content:
             text/plain:
               schema:
@@ -295,7 +295,7 @@ paths:
         in: query
         description: "Температура, до которой нужно охладить вино.\n\nДопустим вво\
           д значений в диапазонах: *5–75*°С или *41–167*°F.\n\nЕсли текущая темпер\
-          атура вина ниже температуры охлаждения, то сервер вернет ошибку 405.\n\n"
+          атура вина ниже температуры охлаждения, то сервер вернет ошибку 405."
         required: true
         style: form
         explode: true
